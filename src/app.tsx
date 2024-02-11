@@ -15,10 +15,8 @@ export function App() {
       <div className="h-px bg-slate-700" />
       <section className="grid grid-cols-3 auto-rows-[250px] gap-6">
         <NewNoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
-        <NoteCard />
+        <NoteCard note={{ content: 'hello world', date: new Date() }} />
+        <NoteCard note={{ content: 'hello world 2', date: new Date() }} />
       </section>
     </main>
   )

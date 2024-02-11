@@ -1,16 +1,52 @@
-export function NoteCard() {
+import * as Dialog from '@radix-ui/react-dialog'
+import { formatDistanceToNow } from 'date-fns'
+import { enUS } from 'date-fns/locale'
+import { X } from 'lucide-react'
+
+export interface INoteCardProps {
+  note: {
+    date: Date
+    content: string
+  }
+}
+
+export function NoteCard({ note }: INoteCardProps) {
   return (
-    <button className="outline-none rounded-md text-left bg-slate-800 p-5 space-y-3 overflow-hidden relative hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-      <span className="text-sm font-medium text-slate-300">há 4 dias</span>
+    <Dialog.Root>
+      <Dialog.Trigger className="flex flex-col outline-none rounded-md text-left bg-slate-800 p-5 gap-y-3 overflow-hidden relative hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
+        <span className="text-sm font-medium text-slate-300">
+          {note.date.toISOString()}
+        </span>
 
-      <p className="text-sm leading-6 text-slate-400">
-        Lorem, ipsum dolor sit amet consectetur adipisicing elit. Nam maiores
-        consequatur incidunt beatae itaque, ut nihil dolorum optio
-        necessitatibus voluptatem minus sapiente iure praesentium suscipit
-        placeat vel id, earum cumque!
-      </p>
+        <p className="text-sm leading-6 text-slate-400">{note.content}</p>
 
-      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
-    </button>
+        <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
+      </Dialog.Trigger>
+      <Dialog.Portal>
+        <Dialog.Overlay className="inset-0 fixed bg-black/50" />
+        <Dialog.Content className="overflow-hidden outline-none max-w-[640px] w-full h-[60vh] z-10 fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 bg-slate-700 rounded-md flex flex-col">
+          <Dialog.Close className="absolute right-0 top-0 bg-slate-800 p-1.5 text-slate-400 hover:text-slate-50">
+            <X className="size-5" />
+          </Dialog.Close>
+          <div className="flex flex-1 flex-col gap-3 p-5">
+            <span className="text-sm font-medium text-slate-300">
+              {formatDistanceToNow(note.date, {
+                locale: enUS,
+                addSuffix: true,
+              })}
+            </span>
+
+            <p className="text-sm leading-6 text-slate-400">{note.content}</p>
+          </div>
+          <button
+            type="button"
+            className="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium"
+          >
+            Remove this{' '}
+            <span className="group-hover:underline text-red-400">note?</span>
+          </button>
+        </Dialog.Content>
+      </Dialog.Portal>
+    </Dialog.Root>
   )
 }
