@@ -1,25 +1,29 @@
 import * as Dialog from '@radix-ui/react-dialog'
-import { formatDistanceToNow } from 'date-fns'
-import { enUS } from 'date-fns/locale'
 import { X } from 'lucide-react'
+import { ParagraphContent } from './paragraph-content'
+import { DateContent } from './date-content'
+import { toast } from 'sonner'
 
-export interface INoteCardProps {
+interface NoteCardProps {
   note: {
-    date: Date
+    id: string
     content: string
+    date: Date
   }
+  onNoteDeleted: (id: string) => void
 }
 
-export function NoteCard({ note }: INoteCardProps) {
+export function NoteCard({ note, onNoteDeleted }: NoteCardProps) {
+  function handleNoteDelete() {
+    toast.info('Note deleted')
+    onNoteDeleted(note.id)
+  }
+
   return (
     <Dialog.Root>
       <Dialog.Trigger className="flex flex-col outline-none rounded-md text-left bg-slate-800 p-5 gap-y-3 overflow-hidden relative hover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-        <span className="text-sm font-medium text-slate-300">
-          {note.date.toISOString()}
-        </span>
-
-        <p className="text-sm leading-6 text-slate-400">{note.content}</p>
-
+        <DateContent date={note.date} />
+        <ParagraphContent content={note.content} />
         <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-black/60 to-black/0 pointer-events-none" />
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -29,18 +33,13 @@ export function NoteCard({ note }: INoteCardProps) {
             <X className="size-5" />
           </Dialog.Close>
           <div className="flex flex-1 flex-col gap-3 p-5">
-            <span className="text-sm font-medium text-slate-300">
-              {formatDistanceToNow(note.date, {
-                locale: enUS,
-                addSuffix: true,
-              })}
-            </span>
-
-            <p className="text-sm leading-6 text-slate-400">{note.content}</p>
+            <DateContent date={note.date} />
+            <ParagraphContent content={note.content} />
           </div>
           <button
             type="button"
-            className="group w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium"
+            onClick={handleNoteDelete}
+            className="group rounded-md w-full bg-slate-800 py-4 text-center text-sm text-slate-300 outline-none font-medium absolute bottom-0"
           >
             Remove this{' '}
             <span className="group-hover:underline text-red-400">note?</span>

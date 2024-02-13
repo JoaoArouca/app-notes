@@ -3,7 +3,11 @@ import { X } from 'lucide-react'
 import { FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 
-export function NewNoteCard() {
+export interface INewNoteCardProps {
+  onNoteCreated: (content: string) => void
+}
+
+export function NewNoteCard({ onNoteCreated }: INewNoteCardProps) {
   const [shouldShowOnboarding, setShouldShowOnboarding] = useState(true)
   const [content, setContent] = useState<string>('')
 
@@ -11,7 +15,9 @@ export function NewNoteCard() {
     setShouldShowOnboarding(false)
   }
 
-  function handleContentChange(event: React.ChangeEvent<HTMLTextAreaElement>) {
+  function handleTextContentChange(
+    event: React.ChangeEvent<HTMLTextAreaElement>,
+  ) {
     setContent(event.target.value)
     if (event.target.value.length === 0) {
       setShouldShowOnboarding(true)
@@ -20,19 +26,18 @@ export function NewNoteCard() {
 
   function handleSaveNote(event: FormEvent) {
     event.preventDefault()
-    console.log(content)
+    onNoteCreated(content)
     toast.success('Note created with success')
+    setContent('')
   }
 
   return (
     <Dialog.Root>
       <Dialog.Trigger className="outline-none flex flex-col rounded-md bg-slate-700 p-5 gap-3 text-left overflow-hidden relativehover:ring-2 hover:ring-slate-600 focus-visible:ring-2 focus-visible:ring-lime-400">
-        <span className="text-sm font-medium text-slate-200">
-          Adicionar nota
-        </span>
+        <span className="text-sm font-medium text-slate-200">Add note</span>
 
         <p className="text-sm leading-6 text-slate-400">
-          Grave uma nota em áudio que será convertida para texto automaticamente
+          Record an audio note to convert to text
         </p>
       </Dialog.Trigger>
       <Dialog.Portal>
@@ -67,8 +72,9 @@ export function NewNoteCard() {
               ) : (
                 <textarea
                   autoFocus
+                  maxLength={1000}
                   className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
-                  onChange={handleContentChange}
+                  onChange={handleTextContentChange}
                   placeholder="Remove all text to switch to an audio note"
                 />
               )}
