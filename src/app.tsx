@@ -51,7 +51,7 @@ export function App() {
   }
 
   return (
-    <main className="mx-auto max-w-6xl my-12 space-y-6">
+    <main className="mx-auto max-w-6xl my-12 space-y-6 px-5">
       <img src={logo} alt="logo" />
       <form className="w-full">
         <input
@@ -62,7 +62,7 @@ export function App() {
         />
       </form>
       <div className="h-px bg-slate-700" />
-      <section className="grid grid-cols-3 auto-rows-[250px] gap-6">
+      <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 auto-rows-[250px] gap-6">
         <NewNoteCard onNoteCreated={onNoteCreated} />
         {filteredNotes.length > 0 &&
           filteredNotes.map((note) => (
