@@ -27,8 +27,9 @@ export function NewNoteCard({ onNoteCreated }: INewNoteCardProps) {
   function handleSaveNote(event: FormEvent) {
     event.preventDefault()
     onNoteCreated(content)
-    toast.success('Note created with success')
     setContent('')
+    setShouldShowOnboarding(true)
+    toast.success('Note created with success')
   }
 
   return (
@@ -76,6 +77,7 @@ export function NewNoteCard({ onNoteCreated }: INewNoteCardProps) {
                   className="text-sm leading-6 text-slate-400 bg-transparent resize-none flex-1 outline-none"
                   onChange={handleTextContentChange}
                   placeholder="Remove all text to switch to an audio note"
+                  value={content}
                 />
               )}
             </div>
